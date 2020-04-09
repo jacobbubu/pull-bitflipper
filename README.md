@@ -4,25 +4,36 @@
 [![Coverage Status](https://coveralls.io/repos/github/jacobbubu/pull-bitflipper/badge.svg)](https://coveralls.io/github/jacobbubu/pull-bitflipper)
 [![npm](https://img.shields.io/npm/v/@jacobbubu/pull-bitflipper.svg)](https://www.npmjs.com/package/@jacobbubu/pull-bitflipper/)
 
-> A starter project that makes creating a TypeScript module extremely easy.
+> Rewritten [pull-bitflipper](https://github.com/dominictarr/pull-bitflipper) in TypeScript.
 
-## Intro.
+# pull-bitflipper
 
-This tool was modified from [typescript-library-starter](https://github.com/alexjoverm/typescript-library-starter), but I made the following revisions:
+pull stream that randomly flips bits in input stream,
+useful for testing authenticated cryptography.
 
-  - Use GitHub Actions instead of TravisCI
-  - Used to develop Node.JS Module instead of packaging code for browser
+## Example
 
-## Usage
+``` js
+import bitFlipper from '@jacobbubu/pull-bitflipper'
 
-```bash
-git clone https://github.com/jacobbubu/typescript-starter.git YOURFOLDERNAME
-cd YOURFOLDERNAME
-npm install
+pull(
+  // Create a source that calls a callback when it gets aborted.
+  source(function onAbort(err) {
+    // This should be called when the output fails because a bit was filpped.
+  }),
+
+  createEncryptStream(),
+
+  // Pass in the probability that a particular message should
+  // Contain a flipped bit.
+  bitFlipper(prop = 0.1),
+
+  createDecryptStream(),
+
+  sink(function (err) {
+    // The sink should error when the decryption stream
+    // finds a packet that does not authenticate.
+  })
+)
+
 ```
-
-**Start coding!** `package.json` and entry files are already set up for you, so don't worry about linking to your main file, typings, etc. Just keep those files with the same name.
-
-## Before push
-
-Before pushing the code to GitHub, please make sure that `NPM_TOKEN` is configured in `https://github.com/__your_repo__/settings/secrets`, or you can do this through [`semantic-release-cli`](https://github.com/semantic-release/cli).
